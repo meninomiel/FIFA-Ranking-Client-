@@ -1,33 +1,120 @@
-.App {
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fbfbfb;
+}
+
+.header {
+  position: fixed;
+  top:0;
+  width:100%;
+  background-color: aqua;
+}
+
+.header-content {
+  width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-flow:column nowrap;
+}
+
+.title {
+  margin: 0;
+  padding: .5em 0;
+  font-size: 1.2em;
+}
+
+.header-nav .nav {
+  display: flex;
+  height: 50px;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav a {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nav a:hover {
+  background-color:rgba(0,0,0,0.1);
+  transition:.2s all ease-in-out;
+}
+
+.content {
+  width:860px;
+  margin: 7em auto 0;
+  padding: .5em 1em;
+  background-color: #fff;
+}
+
+.ranking {
+  width:100%;
+  border-collapse: collapse;
+  font-size: .9em;
+  color:#444;
+}
+
+.ranking thead {
+  font-size: .8em;
+  font-weight: normal;
+}
+
+.ranking th {
+  width:40px;
+}
+
+.ranking thead th:first-child {
+  text-align: left;
+}
+
+.ranking, tr, td, th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: .55em 0;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.ranking td:first-child {
+  width:40px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.last-five {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-flow:row nowrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: 0;
+  padding: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.last-five-title {
+  width:100px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.player-title {
+  width:500px;
+}
+
+.last-five img {
+  padding: 0 .2em;
+  margin: 0;
+}
+
+.player-name {
+  text-align:left;
+}
+
+.player-pic {
+  width:25px;
+  height: 25px;
+  background-color: #ccc;
+  border-radius:50%;
+}
+
+.cell-pic {
+  width:40px;
 }
