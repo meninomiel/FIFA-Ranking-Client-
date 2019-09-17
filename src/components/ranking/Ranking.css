@@ -1,0 +1,65 @@
+.ranking {
+    width:100%;
+    border-collapse: collapse;
+    font-size: .9em;
+    color:#444;
+  }
+  
+  .ranking thead {
+    font-size: .8em;
+    font-weight: normal;
+  }
+  
+  .ranking th {
+    width:40px;
+  }
+  
+  .ranking thead th:first-child {
+    text-align: left;
+  }
+  
+  .ranking, tr, td, th {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: .55em 0;
+    text-align: center;
+  }
+  
+  .ranking td:first-child {
+    width:40px;
+  }
+  
+  .last-five {
+    display: flex;
+    flex-flow:row nowrap;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .last-five-title {
+    width:100px;
+  }
+  
+  .player-title {
+    width:500px;
+  }
+  
+  .last-five img {
+    padding: 0 .2em;
+    margin: 0;
+  }
+  
+  .player-name {
+    text-align:left;
+  }
+  
+  .player-pic {
+    width:25px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius:50%;
+  }
+  
+  .cell-pic {
+    width:40px;
+  }
