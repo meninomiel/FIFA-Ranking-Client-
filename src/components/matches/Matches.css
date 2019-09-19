@@ -1,0 +1,61 @@
+.match-content {
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: stretch;
+}
+
+.match-score {
+    margin-top:.6em;
+}
+
+.score-input {
+    border:0;
+    font-size: 2em;
+    max-width: 35px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.score-input:focus {
+    background-color: #f9f9f9;
+}
+
+.score-input:first-child {
+    text-align: right;
+}
+
+.score-input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+.score-input[type=number]::-webkit-inner-spin-button,
+.score-input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.score-versus {
+    padding: 0 5px;
+    font-size: 2em;
+    font-weight: lighter;
+}
+
+.match-team {
+    display: flex;
+    flex-flow: column nowrap;
+    flex: 2 0 auto;
+    padding: 0 2em;
+}
+
+.match-player {
+    flex: 1 0 auto;
+    padding: .3em 0;
+}
+
+.match-player select {
+    width:100%;
+}
+
+.team-title {
+    text-align: center;
+}

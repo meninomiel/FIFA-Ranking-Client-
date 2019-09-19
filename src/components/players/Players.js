@@ -10,13 +10,14 @@ export default class Players extends Component {
             posicao: 0,
             nome: '',
             pontos: 0,
+            partidas: 0,
             vitorias: 0,
             empates: 0,
             derrotas: 0,
             gPro: 0,
             gContra: 0,
             saldo:0,
-            histórico: []
+            historico: []
         }; 
     }
 
@@ -33,13 +34,12 @@ export default class Players extends Component {
         sender.preventDefault();
 
         $.ajax({
-            url:"http://localhost:8080/api/jogadores/",
+            url:"http://192.168.0.140:8080/api/jogadores/",
             dataType: "json",
             contentType: "application/json",
             type: "post",
             data: JSON.stringify(this.state),
             success: novaListagem => {
-                console.log(this.state);
                 PubSub.publish('player-list-update', novaListagem);
                 this.setState({nome:''});
             },
