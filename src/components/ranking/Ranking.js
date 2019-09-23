@@ -4,8 +4,8 @@ import $ from 'jquery';
 import PubSub from 'pubsub-js';
 
 export default class Ranking extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {players:[]};
     }
     
@@ -48,6 +48,12 @@ export default class Ranking extends Component {
                                         <div className="last-five">
                                             {
                                                 player.historico.map(partida => {
+                                                    if(player.historico.length > 5){
+                                                        player.historico.reverse();
+                                                        player.historico.length = 5;
+                                                        player.historico.reverse();
+                                                    }
+
                                                     switch (partida) {
                                                         case 'v':
                                                             return (<img src={require('../../images/ranking/win.svg')} alt="vitória" />);

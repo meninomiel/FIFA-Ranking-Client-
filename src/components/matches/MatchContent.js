@@ -53,6 +53,7 @@ export default class MatchContent extends Component {
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador1"
                             name="timeB" />
+                            
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador2"
                             name="timeB" />
