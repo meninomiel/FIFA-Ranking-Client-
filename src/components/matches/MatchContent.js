@@ -64,7 +64,7 @@ export default class MatchContent extends Component {
 
     setScore(sender){
         let placar = this.state.match.placar;
-        placar[sender.target.name] = sender.target.value;
+        placar[sender.target.name] = parseInt(sender.target.value);
         this.setState({placar});
     }
 

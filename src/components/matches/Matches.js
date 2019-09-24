@@ -3,6 +3,7 @@ import './Matches.css';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
 import MatchContent from './MatchContent';
+import { thisExpression } from '@babel/types';
 
 export default class Matches extends Component {
     constructor(props){
@@ -32,6 +33,51 @@ export default class Matches extends Component {
             players:[],
             matches: []
         };
+
+        this.matches = [];
+    }
+
+    render(){
+        return(
+            <div>
+                <form onSubmit={this.sendNewMatch.bind(this)} id="rankingForm">
+                    <MatchContent componentState={this.state} />
+                    <input type="submit" value="Enviar"/>
+                </form>
+                {
+                    this.state.matches.map((match, index) => {                        
+                        return (
+                            <div className="tableWrapper" key={`k${index}`}>
+                                <div className="matchItem">
+                                    <h5 className="matchTitle">{`${match.data.toString()}`}</h5>
+                                    <div className="matchBody">
+                                        <div className="matchTeam">
+                                            <div className="players">
+                                                <h4 className="teamTitle">Equipe A</h4>
+                                                <p className="playerName">{match.timeA.jogador1.nome}</p>
+                                                <p className="playerName">{match.timeA.jogador2.nome}</p>
+                                            </div>
+                                        </div>
+                                        <div className="score">
+                                                <p className="scoreNumber">{match.placar.timeA}</p>
+                                                <p className="versus">X</p>
+                                                <p className="scoreNumber lose">{match.placar.timeB}</p>
+                                            </div>
+                                        <div className="matchTeam">
+                                            <div className="players">
+                                                <h4 className="teamTitle">Team B</h4>
+                                                <p className="playerName">{match.timeB.jogador1.nome}</p>
+                                                <p className="playerName">{match.timeB.jogador2.nome}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        );
     }
 
     componentDidMount(){
@@ -40,22 +86,19 @@ export default class Matches extends Component {
             dataType: 'JSON',
             success: resposta => this.setState({players: resposta})
         });
-
-        PubSub.subscribe('player-list-update', (topico, novaLista) => {
-            this.setState({players:novaLista});
+        $.ajax({
+            url:"http://192.168.0.140:8080/api/partidas",
+            dataType: 'JSON',
+            success: resposta => this.setState({matches: resposta})
         });
+
+        PubSub.subscribe('player-list-update', (topico, novaLista) => this.setState({players:novaLista}));
+
+        PubSub.subscribe('match-list-update', (topico, novaLista) => this.setState({matches:novaLista}));
     } 
 
-    render(){
-        return(
-            <form onSubmit={this.sendNewMatch.bind(this)} id="rankingForm">
-                <MatchContent componentState={this.state} />
-                <input type="submit" value="Enviar"/>
-            </form>
-        );
-    }
 
-    updateStats(timeVencedor, timePerdedor, partida){
+    updateStats(timeVencedor, timePerdedor, partida, empate = false){
 
         let scoreVencedor = parseInt(partida.placar[timeVencedor.id], 10);
         let scorePerdedor = parseInt(partida.placar[timePerdedor.id], 10);
@@ -65,44 +108,64 @@ export default class Matches extends Component {
         // e acessar os atributos
         Object.keys(timeVencedor).forEach(jogador => {
             
-            console.log(`entro no ${timeVencedor[jogador].nome}`);
-
             // retorna no primeiro key "id"                      
             if (timeVencedor[jogador] === timeVencedor.id){
                 return;
             }
 
+            // caso empate
+            if(empate === true){
+
+                // lê os valores guardados no estado e atualiza as estatísticas
+                let statePlayer = players.find(player => player.nome === timeVencedor[jogador].nome);
+
+                // TIME A //
+                statePlayer.partidas++;
+                statePlayer.empates++;
+                statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
+                statePlayer.gPro = scoreVencedor;
+                statePlayer.gContra = scorePerdedor;
+                statePlayer.saldo = scoreVencedor - scorePerdedor;
+                statePlayer.historico.push('e');
+
+                // TIME B //
+                statePlayer = players.find(player => player.nome === timePerdedor[jogador].nome);
+                statePlayer.partidas++;
+                statePlayer.empates++;
+                statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
+                statePlayer.gPro = scorePerdedor;
+                statePlayer.gContra = scoreVencedor;
+                statePlayer.saldo = scorePerdedor - scoreVencedor;
+                statePlayer.historico.push('e');
+
+                return;
+            }
+            
+
             // lê os valores guardados no estado e atualiza as estatísticas
-            players.every((player, index) => {
+            let statePlayer = players.find(player => player.nome === timeVencedor[jogador].nome);
 
-                //confere se o registro corresponde
-                if (player.nome === timeVencedor[jogador].nome){
+            // TIME VENCEDOR //
+            statePlayer.partidas++;
+            statePlayer.vitorias++;
+            statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
+            statePlayer.gPro = scoreVencedor;
+            statePlayer.gContra = scorePerdedor;
+            statePlayer.saldo = scoreVencedor - scorePerdedor;
+            statePlayer.historico.push('v');
 
-                    // timeVencedor[jogador].partidas = player.partidas + 1;
-                    // timeVencedor[jogador].pontos = timeVencedor[jogador].partidas * 3;
-                    // timeVencedor[jogador].vitorias = player.vitorias + 1;
-                    // timeVencedor[jogador].empates = player.empates;
-                    // timeVencedor[jogador].derrotas = player.derrotas;
-                    // timeVencedor[jogador].gPro = scoreVencedor;
-                    // timeVencedor[jogador].gContra = scorePerdedor;
-                    // timeVencedor[jogador].saldo = scoreVencedor - scorePerdedor;
-
-                    // timeVencedor[jogador].historico = player.historico;
-                    // timeVencedor[jogador].historico.push('v');
-                    
-                    //delete players[index];
-                    players[index] = timeVencedor[jogador];
-                    
-                    return true;                    
-                }
-
-            })
+            // TIME PERDEDOR //
+            statePlayer = players.find(player => player.nome === timePerdedor[jogador].nome);
+            statePlayer.partidas++;
+            statePlayer.derrotas++;
+            statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
+            statePlayer.gPro = scorePerdedor;
+            statePlayer.gContra = scoreVencedor;
+            statePlayer.saldo = scorePerdedor - scoreVencedor;
+            statePlayer.historico.push('d');
 
         });
 
-
-        this.setState({players: players});
-        console.log(this.state.players);
     }
 
     sendNewMatch(sender){
@@ -110,26 +173,42 @@ export default class Matches extends Component {
 
         let partida = this.state.match;
         partida.data = new Date();
-        console.log(partida);
 
         if(partida.placar.timeA > partida.placar.timeB){
             this.updateStats(partida.timeA, partida.timeB, partida);                        
+        } else if (partida.placar.timeB > partida.placar.timeA){
+            this.updateStats(partida.timeB, partida.timeA, partida);
+        } else {
+            this.updateStats(partida.timeA, partida.timeB, partida, true);
         }
 
-        document.querySelector("#rankingForm").reset();
+        // registrar jogadores
+        this.state.players.map(player => {
+            return(
+                $.ajax({
+                    url:"http://192.168.0.140:8080/api/jogadores/",
+                    dataType: "json",
+                    contentType: "application/json",
+                    type: "post",
+                    data: JSON.stringify(player),
+                    success: novaListagem => {
+                        PubSub.publish('player-list-update', novaListagem);
 
-        // $.ajax({
-        //     url:"http://192.168.0.140:8080/api/partidas/",
-        //     dataType: "json",
-        //     contentType: "application/json",
-        //     type: "post",
-        //     data: JSON.stringify(this.state),
-        //     success: novaListagem => {
-        //         console.log(this.state);
-        //         PubSub.publish('player-list-update', novaListagem);
-        //         this.setState({nome:''});
-        //     },
-        //     error: resposta => console.log(resposta)
-        // });    
+                        //resetar form
+                        //document.querySelector("#rankingForm").reset();
+                        //this.setState({[placar.]:''}); limpar placar
+                    },
+                    error: resposta => console.log(resposta)
+                })
+            );
+        });
+
+        //registrar partida
+        let partidas = this.matches.slice(0);
+        console.log(partidas == this.state.matches);
+        partidas.push(partida);
+        this.matches = partidas;
+
+        console.log(this.matches)
     }
 }
