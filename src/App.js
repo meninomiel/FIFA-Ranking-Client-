@@ -18,7 +18,7 @@ function App() {
             <div className="header-nav">
               <nav className="nav">
                 <NavLink exact to="/" activeClassName="active">Tabela</NavLink>              
-                <a>Estatísticas</a>
+                {/* <a href="#">Estatísticas</a> */}
                 <NavLink to="/partidas" activeClassName="active">Partidas</NavLink>
                 <NavLink to="/jogadores" activeClassName="active">Jogadores</NavLink>              
               </nav>

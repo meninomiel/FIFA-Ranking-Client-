@@ -12,10 +12,14 @@ export default class MatchPlayerSelect extends Component {
                 <select data-id={this.props.playerId} name={this.props.name} onChange={this.setPlayer.bind(this)}>
                     <option defaultValue value="">-</option>
                     {
-                        this.props.players.map((player, index) => 
-                            <option key={index} value={player.nome}>
-                                {player.nome}
-                            </option>
+                        this.props.players.map((player, index) => {                           
+                                return(
+                                    <option key={index} value={player.nome}>
+                                        {player.nome}
+                                    </option>
+                                )
+                            
+                            }
                         )
                     }                                
                 </select>
@@ -30,7 +34,12 @@ export default class MatchPlayerSelect extends Component {
         //let value = JSON.parse(sender.target.value);        
         //let returnedObj = Object.assign(player, value);
 
+        // let selPlayers = this.state.selectedPlayers;
+        // selPlayers.push(sender.target.value);
+
         player.nome = sender.target.value;
         this.setState({player});   //envia apenas o nome    
+        //this.setState({selectedPlayers: selPlayers});
+        //console.log(this.state.selectedPlayers)
     }
 }
