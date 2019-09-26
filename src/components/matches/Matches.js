@@ -3,7 +3,7 @@ import './Matches.css';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
 import MatchContent from './MatchContent';
-import { thisExpression } from '@babel/types';
+//import { thisExpression } from '@babel/types';
 
 export default class Matches extends Component {
     constructor(props){
@@ -31,10 +31,9 @@ export default class Matches extends Component {
                 empate: null
             },
             players:[],
-            matches: []
+            matches: [],
+            selectedPlayers:[]
         };
-
-        this.matches = [];
     }
 
     render(){
@@ -123,8 +122,8 @@ export default class Matches extends Component {
                 statePlayer.partidas++;
                 statePlayer.empates++;
                 statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
-                statePlayer.gPro = scoreVencedor;
-                statePlayer.gContra = scorePerdedor;
+                statePlayer.gPro = statePlayer.gPro + scoreVencedor;
+                statePlayer.gContra = statePlayer.gContra + scorePerdedor;
                 statePlayer.saldo = scoreVencedor - scorePerdedor;
                 statePlayer.historico.push('e');
 
@@ -149,8 +148,8 @@ export default class Matches extends Component {
             statePlayer.partidas++;
             statePlayer.vitorias++;
             statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
-            statePlayer.gPro = scoreVencedor;
-            statePlayer.gContra = scorePerdedor;
+            statePlayer.gPro = statePlayer.gPro + scoreVencedor;
+            statePlayer.gContra = statePlayer.gContra + scorePerdedor;
             statePlayer.saldo = scoreVencedor - scorePerdedor;
             statePlayer.historico.push('v');
 
@@ -159,8 +158,8 @@ export default class Matches extends Component {
             statePlayer.partidas++;
             statePlayer.derrotas++;
             statePlayer.pontos = (statePlayer.vitorias * 3) + (statePlayer.empates);            
-            statePlayer.gPro = scorePerdedor;
-            statePlayer.gContra = scoreVencedor;
+            statePlayer.gPro = statePlayer.gPro + scorePerdedor;
+            statePlayer.gContra = statePlayer.gContra + scoreVencedor;
             statePlayer.saldo = scorePerdedor - scoreVencedor;
             statePlayer.historico.push('d');
 
@@ -193,6 +192,7 @@ export default class Matches extends Component {
                     data: JSON.stringify(player),
                     success: novaListagem => {
                         PubSub.publish('player-list-update', novaListagem);
+                        this.setState({players:novaListagem});
 
                         //resetar form
                         //document.querySelector("#rankingForm").reset();
@@ -203,12 +203,13 @@ export default class Matches extends Component {
             );
         });
 
-        //registrar partida
-        let partidas = this.matches.slice(0);
-        console.log(partidas == this.state.matches);
-        partidas.push(partida);
-        this.matches = partidas;
+        //registrar partida (duplicando)
+        this.setState({matches: this.state.matches.concat(partida)}, () => {
+            console.log(this.state.matches);
+        });
+        //
+        
 
-        console.log(this.matches)
+        
     }
 }
