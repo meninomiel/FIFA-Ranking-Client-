@@ -32,7 +32,7 @@ export default class Matches extends Component {
             },
             players:[],
             matches: [],
-            selectedPlayers:[]
+            selectedPlayers: []
         };
     }
 
@@ -207,9 +207,6 @@ export default class Matches extends Component {
         this.setState({matches: this.state.matches.concat(partida)}, () => {
             console.log(this.state.matches);
         });
-        //
-        
-
-        
+        //        
     }
 }

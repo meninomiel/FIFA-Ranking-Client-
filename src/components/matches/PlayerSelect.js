@@ -31,15 +31,12 @@ export default class MatchPlayerSelect extends Component {
         
         let obj = sender.target.getAttribute('data-id');
         let player = this.props.componentState.match[sender.target.name][obj];
-        //let value = JSON.parse(sender.target.value);        
-        //let returnedObj = Object.assign(player, value);
-
-        // let selPlayers = this.state.selectedPlayers;
-        // selPlayers.push(sender.target.value);
+        let selected = this.props.componentState.selectedPlayers;
 
         player.nome = sender.target.value;
-        this.setState({player});   //envia apenas o nome    
-        //this.setState({selectedPlayers: selPlayers});
-        //console.log(this.state.selectedPlayers)
+        selected.push(player.nome);
+        this.setState({player, selected});   //envia nome    
+
+        console.log(this.props)
     }
 }
