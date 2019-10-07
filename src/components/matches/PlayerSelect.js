@@ -1,40 +1,41 @@
 import React, { Component } from 'react';
 
 export default class MatchPlayerSelect extends Component {
-    constructor(props){
-        super(props);
-        this.state = this.props.componentState;
-    }
 
-    render(){
-        return(
-            <div className="match-player">
-                <select data-id={this.props.playerId} name={this.props.name} onChange={this.setPlayer.bind(this)}>
-                    <option defaultValue value="">-</option>
-                    {
-                        this.props.players.map((player, index) => {                          
-                                return(
-                                    <option key={index} value={player.nome}>
-                                        {player.nome}
-                                    </option>
-                                )
-                            
-                            }
-                        )
-                    }                                
-                </select>
-            </div>
-        );
-    }
+   render() {
+      const {players, selectedPlayers} = this.props.componentState;
 
-    setPlayer(sender){
-        
-        let obj = sender.target.getAttribute('data-id');
-        let player = this.props.componentState.match[sender.target.name][obj];
-        let selected = this.props.componentState.selectedPlayers;
+      return (
+         <div className="match-player">
+            <select select-id={this.props.selectId} data-id={this.props.playerId} name={this.props.name} onChange={this.setPlayer.bind(this)}>
+               <option defaultValue value="">-</option>
+               {
+                  /* ARRUMAR ESSA DESGRAÇA */
+                  players.filter(p => !selectedPlayers.includes(p)).concat(this).map((player, index) => {
+                     return(
+                        <option key={index} value={player.nome}>
+                           {player.nome}
+                        </option>
+                     )
+                  })
+               }
+            </select>
+         </div>
+      );
+   }
 
-        player.nome = sender.target.value;
-        selected.push(player.nome);
-        this.setState({player, selected});   //envia nome    
-    }
+   setPlayer(sender) {
+
+      let obj = sender.target.getAttribute('data-id');
+      let player = this.props.componentState.match[sender.target.name][obj];
+      let selected = this.props.componentState.selectedPlayers;
+
+      let index = sender.target.getAttribute('select-id') - 1;
+      player.nome = sender.target.value;
+
+      selected[index] = this.props.componentState.players[index];
+
+      this.setState({ player, selected });
+   }
+
 }

@@ -8,7 +8,7 @@ export default class Matches extends Component {
    constructor(props) {
       super(props);
 
-      this.state = {
+      this.defaultState = {
          match: {
             data: '',
             timeA: {
@@ -24,13 +24,14 @@ export default class Matches extends Component {
             placar: {
                timeA: 0,
                timeB: 0
-            },
-            empate: null
+            }
          },
          players: [],
          matches: [],
          selectedPlayers: []
-      };
+      }
+
+      this.state = this.defaultState;
    }
 
    render() {
@@ -41,7 +42,7 @@ export default class Matches extends Component {
                <input type="submit" value="Enviar" />
             </form>
             {
-               this.state.matches.map((match, index) => {
+               this.state.matches.slice(0).reverse().map((match, index) => {
                   return (
                      <div className="tableWrapper" key={`k${index}`}>
                         <div className="matchItem">
@@ -82,15 +83,15 @@ export default class Matches extends Component {
          dataType: 'JSON',
          success: resposta => this.setState({ players: resposta })
       });
-      // $.ajax({
-      //    url: "http://192.168.0.140:8080/api/partidas",
-      //    dataType: 'JSON',
-      //    success: resposta => this.setState({ matches: resposta })
-      // });
+      $.ajax({
+         url: "http://192.168.0.140:8080/api/partidas",
+         dataType: 'JSON',
+         success: resposta => this.setState({ matches: resposta })
+      });
 
       PubSub.subscribe('player-list-update', (topico, novaLista) => this.setState({ players: novaLista }));
 
-      //PubSub.subscribe('match-list-update', (topico, novaLista) => this.setState({ matches: novaLista }));
+      PubSub.subscribe('match-list-update', (topico, novaLista) => this.setState({ matches: novaLista }));
    }
 
 
@@ -201,7 +202,20 @@ export default class Matches extends Component {
          );
       });
 
-      //registrar partida (duplicando)
+      $.ajax({
+         url: "http://192.168.0.140:8080/api/partidas/",
+         dataType: "json",
+         contentType: "application/json",
+         type: "post",
+         data: JSON.stringify(partida),
+         success: novaListagem => {
+            PubSub.publish('match-list-update', novaListagem);
+            this.setState({ matches: novaListagem });
+         },
+         error: resposta => console.log(resposta)
+      })
+
+      //registrar partida (funcionando)
       this.setState({ matches: [...this.state.matches, partida] }, () => {
         console.log(this.state.matches);
       });

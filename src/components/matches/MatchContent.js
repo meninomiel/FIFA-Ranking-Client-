@@ -28,11 +28,11 @@ export default class MatchContent extends Component {
                         <h4 className="team-title">Equipe A</h4>
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador1"
-                            name="timeA" />
+                            name="timeA" selectId="1"/>
 
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador2"
-                            name="timeA" />
+                            name="timeA" selectId="2"/>
                     </div>
 
                     <div className="match-score">
@@ -52,11 +52,11 @@ export default class MatchContent extends Component {
                         <h4 className="team-title">Equipe B</h4>
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador1"
-                            name="timeB" />
+                            name="timeB" selectId="3"/>
                             
                         <MatchPlayerSelect players={this.state.players} 
                             componentState={this.state} playerId="jogador2"
-                            name="timeB" />
+                            name="timeB" selectId="4"/>
                     </div>
                 </div>
         );
