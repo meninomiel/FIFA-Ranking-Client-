@@ -83,13 +83,14 @@ export default class Matches extends Component {
          dataType: 'JSON',
          success: resposta => this.setState({ players: resposta })
       });
+
+      PubSub.subscribe('player-list-update', (topico, novaLista) => this.setState({ players: novaLista }));
+
       $.ajax({
          url: "http://192.168.0.140:8080/api/partidas",
          dataType: 'JSON',
          success: resposta => this.setState({ matches: resposta })
-      });
-
-      PubSub.subscribe('player-list-update', (topico, novaLista) => this.setState({ players: novaLista }));
+      });    
 
       PubSub.subscribe('match-list-update', (topico, novaLista) => this.setState({ matches: novaLista }));
    }

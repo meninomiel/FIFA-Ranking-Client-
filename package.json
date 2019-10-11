@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "immutability-helper": "^3.0.1",
     "jquery": "^3.4.1",
     "pubsub-js": "^1.7.0",
     "react": "^16.9.0",
